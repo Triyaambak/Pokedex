@@ -1,0 +1,8 @@
+services:
+  cache:
+    image: redis:alpine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${REDIS_PORT:-3006}: 6379
