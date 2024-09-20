@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	pokeclient "github.com/Triyaambak/Pokedex/internal/pokeclient"
 )
 
-func commandMap(cfg *urlCfg) error {
-	cfg.Offset += 20
-	err := getLocationData(cfg)
+func commandMap(pokecfg *pokeclient.Client) error {
+	pokecfg.Cfg.Offset += 20
+	err := getLocationData(pokecfg)
 
 	if err != nil {
 		fmt.Println("Something went wrong while moving in forward direction")
@@ -19,22 +21,33 @@ func commandMap(cfg *urlCfg) error {
 	return nil
 }
 
-func commandMapback(cfg *urlCfg) error {
-	if cfg.Offset == 0 {
+func commandMapback(pokecfg *pokeclient.Client) error {
+	if pokecfg.Cfg.Offset == 0 {
 		fmt.Println("Cannot move in the backward direction , you are in the starting point")
 	}
-	cfg.Offset -= 20
+	pokecfg.Cfg.Offset -= 20
 
-	err := getLocationData(cfg)
+	err := getLocationData(pokecfg)
 	if err != nil {
 		fmt.Println("Something went wrong while moving in backward direction")
 		return err
 	}
+
 	return nil
 }
 
-func getLocationData(cfg *urlCfg) error {
-	url := fmt.Sprintf("%s?offset=%d&size=%d", cfg.Url, cfg.Offset, cfg.Size)
+func getLocationData(pokecfg *pokeclient.Client) error {
+	url := fmt.Sprintf("%s?offset=%d&size=%d", pokecfg.Cfg.Url, pokecfg.Cfg.Offset, pokecfg.Cfg.Size)
+
+	data, ok := pokecfg.Client.Get(url)
+
+	if ok {
+		err := printLocationData(data)
+		if err == nil {
+			return nil
+		}
+	}
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
@@ -47,16 +60,15 @@ func getLocationData(cfg *urlCfg) error {
 	}
 	defer w.Body.Close()
 
-	data, err := io.ReadAll(w.Body)
+	data, err = io.ReadAll(w.Body)
 	if err != nil {
 		return err
 	}
 
+	pokecfg.Client.Add(url, data)
+
 	err = printLocationData(data)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func printLocationData(data []byte) error {

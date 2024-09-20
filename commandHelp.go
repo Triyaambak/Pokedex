@@ -1,8 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-func commandHelp(cfg *urlCfg) error {
+	"github.com/Triyaambak/Pokedex/internal/pokeclient"
+)
+
+func commandHelp(pokecfg *pokeclient.Client) error {
 	fmt.Println()
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")

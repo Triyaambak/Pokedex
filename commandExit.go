@@ -1,8 +1,12 @@
 package main
 
-import "os"
+import (
+	"os"
 
-func commandExit(cfg *urlCfg) error {
+	"github.com/Triyaambak/Pokedex/internal/pokeclient"
+)
+
+func commandExit(pokecfg *pokeclient.Client) error {
 	os.Exit(0)
 	return nil
 }
