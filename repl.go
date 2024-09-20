@@ -5,28 +5,18 @@ import (
 	"fmt"
 	"os"
 	"strings"
-)
 
-type urlCfg struct {
-	Size   int
-	Offset int
-	Url    string
-}
+	pokeclient "github.com/Triyaambak/Pokedex/internal/pokeclient"
+)
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*urlCfg) error
+	callback    func(*pokeclient.Client) error
 }
 
-func startRepl() {
+func startRepl(pokecfg pokeclient.Client) {
 	reader := bufio.NewScanner(os.Stdin)
-
-	cfg := urlCfg{
-		Size:   20,
-		Offset: -20,
-		Url:    "https://pokeapi.co/api/v2/location/",
-	}
 
 	for {
 		fmt.Print("Pokedex > ")
@@ -39,7 +29,7 @@ func startRepl() {
 		command, exists := getCommands()[commandName]
 
 		if exists {
-			err := command.callback(&cfg)
+			err := command.callback(&pokecfg)
 			if err != nil {
 				fmt.Println(err)
 			}

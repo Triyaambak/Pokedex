@@ -1,5 +1,12 @@
 package main
 
+import (
+	"time"
+
+	pokeclient "github.com/Triyaambak/Pokedex/internal/pokeclient"
+)
+
 func main() {
-	startRepl()
+	pokecfg := pokeclient.NewClient(time.Minute * 5)
+	startRepl(pokecfg)
 }
