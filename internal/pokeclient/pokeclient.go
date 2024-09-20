@@ -13,17 +13,21 @@ type urlCfg struct {
 }
 
 type Client struct {
-	Client pokecache.Cache
-	Cfg    urlCfg
+	Client   pokecache.Cache
+	MapUrl   urlCfg
+	PokeUrl  string
+	CatchUrl string
 }
 
 func NewClient(interval time.Duration) Client {
 	return Client{
 		Client: pokecache.NewCache(interval),
-		Cfg: urlCfg{
+		MapUrl: urlCfg{
 			Size:   20,
 			Offset: -20,
 			Url:    "https://pokeapi.co/api/v2/location/",
 		},
+		PokeUrl:  "https://pokeapi.co/api/v2/location-area/",
+		CatchUrl: "https://pokeapi.co/api/v2/pokemon/",
 	}
 }

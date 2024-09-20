@@ -10,7 +10,7 @@ import (
 )
 
 func commandMap(pokecfg *pokeclient.Client) error {
-	pokecfg.Cfg.Offset += 20
+	pokecfg.MapUrl.Offset += 20
 	err := getLocationData(pokecfg)
 
 	if err != nil {
@@ -22,10 +22,10 @@ func commandMap(pokecfg *pokeclient.Client) error {
 }
 
 func commandMapback(pokecfg *pokeclient.Client) error {
-	if pokecfg.Cfg.Offset == 0 {
+	if pokecfg.MapUrl.Offset == 0 {
 		fmt.Println("Cannot move in the backward direction , you are in the starting point")
 	}
-	pokecfg.Cfg.Offset -= 20
+	pokecfg.MapUrl.Offset -= 20
 
 	err := getLocationData(pokecfg)
 	if err != nil {
@@ -37,7 +37,7 @@ func commandMapback(pokecfg *pokeclient.Client) error {
 }
 
 func getLocationData(pokecfg *pokeclient.Client) error {
-	url := fmt.Sprintf("%s?offset=%d&size=%d", pokecfg.Cfg.Url, pokecfg.Cfg.Offset, pokecfg.Cfg.Size)
+	url := fmt.Sprintf("%s?offset=%d&size=%d", pokecfg.MapUrl.Url, pokecfg.MapUrl.Offset, pokecfg.MapUrl.Size)
 
 	data, ok := pokecfg.Client.Get(url)
 
