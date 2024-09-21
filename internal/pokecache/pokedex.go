@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"encoding/json"
 	"sync"
 )
 
@@ -44,15 +43,11 @@ func (p *Pokedex) Add(name string, pokedet PokemonDet) error {
 	return nil
 }
 
-func (p *Pokedex) Get(name string) ([]byte, bool) {
+func (p *Pokedex) Get(name string) (PokemonDet, bool) {
 	data, ok := p.cache[name]
 	if !ok {
-		return nil, false
+		return PokemonDet{}, false
 	}
 
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		return nil, false
-	}
-	return jsonData, true
+	return data, true
 }
