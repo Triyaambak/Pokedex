@@ -1,6 +1,7 @@
 package pokecache
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -50,4 +51,21 @@ func (p *Pokedex) Get(name string) (PokemonDet, bool) {
 	}
 
 	return data, true
+}
+
+func (p *Pokedex) Print() {
+	for _, v := range p.cache {
+		fmt.Printf("Name: %s\n", v.Name)
+		fmt.Printf("Height: %d\n", v.Height)
+		fmt.Printf("Weight: %d\n", v.Weight)
+		fmt.Println("Stats:")
+		for _, stat := range v.Stats {
+			fmt.Printf("  - %s: %d\n", stat.Stat.Name, stat.BaseStat)
+		}
+		fmt.Println("Types:")
+		for _, t := range v.Types {
+			fmt.Printf("  - %s\n", t.Type.Name)
+		}
+		fmt.Println()
+	}
 }
