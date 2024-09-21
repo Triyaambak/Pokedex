@@ -14,6 +14,7 @@ type urlCfg struct {
 
 type Client struct {
 	Client   pokecache.Cache
+	Pokedex  pokecache.Pokedex
 	MapUrl   urlCfg
 	PokeUrl  string
 	CatchUrl string
@@ -21,7 +22,8 @@ type Client struct {
 
 func NewClient(interval time.Duration) Client {
 	return Client{
-		Client: pokecache.NewCache(interval),
+		Client:  pokecache.NewCache(interval),
+		Pokedex: pokecache.NewPokedex(),
 		MapUrl: urlCfg{
 			Size:   20,
 			Offset: -20,
